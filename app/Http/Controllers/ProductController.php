@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -11,16 +12,22 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // Aqui retorna a  minha view
-        return view('ListarProdutos');
+        $products         = Product::orderBy('created_at', 'desc')->get();
+        return view('ListarProdutos')
+                ->with('products', $products);
+
     }
+
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        // Retorna apenas a minha view
+        return view('CadastrarProduto');
+
     }
 
     /**
@@ -28,7 +35,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Aqui é que a mágica acontece!!😎😎
+
+        $request->validate([
+            'nome_produto'          => 'required',
+            'marca'                 => 'required',
+            'categoria'             => 'required',
+            'valor_compra'          => 'required|numeric',
+            'valor_venda'           => 'required|numeric',
+            'qtd_estoque'           => 'required|integer',
+        ]);
+
+        Product::create($request->all());
+
+        return redirect('/products')->with('message', 'Produto Criado com Sucesso👌👌😎');
+
+
     }
 
     /**
