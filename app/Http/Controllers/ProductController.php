@@ -13,9 +13,8 @@ class ProductController extends Controller
     public function index()
     {
         $products         = Product::orderBy('created_at', 'desc')->get();
-        return view('ListarProdutos')
-                ->with('products', $products);
-
+        return view('products.index')
+            ->with('products', $products);
     }
 
 
@@ -26,8 +25,7 @@ class ProductController extends Controller
     public function create()
     {
         // Retorna apenas a minha view
-        return view('CadastrarProduto');
-
+        return view('products.');
     }
 
     /**
@@ -48,9 +46,7 @@ class ProductController extends Controller
 
         Product::create($request->all());
 
-        return redirect('/products')->with('message', 'Produto Criado com Sucesso👌👌😎');
-
-
+        return redirect()->route('products.index')->with('message', 'Produto Criado com Sucesso👌👌😎');
     }
 
     /**
@@ -64,9 +60,11 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        // Editar Produtos
+        $product = Product::find($id);
+        return view('products.edit', compact('product'));
     }
 
     /**
@@ -75,6 +73,20 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         //
+         $product = Product::find($id);
+         $request->validate([
+            'nome_produto'          => '',
+            'marca'                 => '',
+            'categoria'             => '',
+            'valor_compra'          => 'numeric',
+            'valor_venda'           => 'numeric',
+            'qtd_estoque'           => 'integer',
+        ]);
+
+        $product->update($request->all());
+
+        return redirect()->route('products.index')->with('message', 'Produto Editado com Sucesso👌👌😎');
+
     }
 
     /**
@@ -82,6 +94,10 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Deletar Produto
+        $product = Product::find($id);
+        $product->delete();
+        return redirect()->route('products.index')->with('message', 'Seu produto foi deletado da base de dados🫢🫢');
+
     }
 }

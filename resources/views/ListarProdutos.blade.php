@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Listar Produtos</title>
+
+    <style>
+
+        td, th {
+            border: 1px solid;
+        }
+
+    </style>
+
 </head>
 <body>
     <div>
@@ -28,7 +37,7 @@
 
     @if(Session::has('message'))
         <div role="alert">
-            
+
             <h4 style="color: #045c01"><strong>Parabéns!</strong> {!! Session::get('message') !!}</h4>
 
         </div>
@@ -52,6 +61,8 @@
                 <th>CATEGORIA</th>
                 <th>QTD.ESTOQUE</th>
                 <th>VALOR</th>
+                <th>AÇÕES</th>
+
             </tr>
         </thead>
         <tbody>
@@ -63,6 +74,9 @@
                 <td> {{ $product->categoria }} </td>
                 <td> {{ $product->qtd_estoque }} </td>
                 <td> R${{ $product->valor_venda }} </td>
+                <td>
+                    <a href=" {{ route('products.edit', $products) }} "><button  class="btn btn-primary">Editar</button></a>
+                </td>
 
               </tr>
 
